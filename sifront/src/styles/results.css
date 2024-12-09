@@ -1,0 +1,13 @@
+.table-results {
+    margin: 2% 5% 0 5%;    
+}
+
+.table-results, th, td {
+    border: 1px solid #163E6C;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.table-results th, td {
+    padding: 5px 10px;
+}

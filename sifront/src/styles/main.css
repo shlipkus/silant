@@ -1,0 +1,52 @@
+.main {
+    margin: 0;
+    padding: 0;
+    color: #163E6C;
+}
+
+.title {
+    margin-left: 5%;
+}
+
+.form {
+    margin-left: 5%;
+    margin-top: 3%;
+}
+
+.label {
+    font-size: 22px;
+}
+
+.form-input {
+    margin-left: 2%;
+    font-family: 'PTAstraSans';
+    font-size: 22px;
+    border-style: none;
+    border: 1px solid #163E6C;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.form-submit {
+    margin-left: 2%;
+    padding: 0;
+    width: 200px;
+    font-family: 'PTAstraSans';
+    font-size: 20px;
+    line-height: 30px;
+    border-style: none;
+    border: 1px solid #163E6C;
+    border-radius: 5px;
+    background: #163E6C;
+    color: white; 
+    cursor: pointer;
+}
+
+.form-submit:active {
+    border-style: none;
+}
+
+.title-result {
+    margin-left: 5%;
+    margin-top: 5%;
+}
