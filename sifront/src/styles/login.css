@@ -1,19 +1,23 @@
-.login {
-    margin: 0 auto;
-    width: 20%;
-    height: 15%;
-    border: 1px solid black;
-    border-radius: 10px;
-}
-
-.form {
-    height: 100%;
+.login-form {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
 }
 
-.input {
-    display: block;
+.login-block {
+    width: 350px;
+    margin: 0 auto;
+}
+
+.login-input {
+    margin: 10px 0 20px 0;
+    font-family: 'PTAstraSans';
+    font-size: 22px;
+    border-style: none;
+    border: 1px solid #163E6C;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.text {
+    margin: 10px 0 10px 0;
 }

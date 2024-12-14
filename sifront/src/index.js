@@ -6,6 +6,8 @@ import store from "./redux/store";
 import './styles/index.css';
 import Root from './routes/root';
 import SMain from './routes/main';
+import Login from './routes/login';
+import Machine from './routes/machine';
 
 // Clear the existing HTML content
 document.body.innerHTML = '<div id="root"></div>';
@@ -18,6 +20,18 @@ const router = createBrowserRouter([
             {
                 path: '/',
                 element: <SMain />
+            },
+            {
+                path: '/login',
+                element: <Login />
+            },
+            {
+                path: '/machine/:num',
+                element: <Machine />
+            },
+            {
+                path: '/machine/reclame/:num',
+                element: <h1>HI</h1>
             }
         ]
     }

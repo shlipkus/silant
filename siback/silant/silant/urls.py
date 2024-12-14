@@ -27,8 +27,11 @@ router.register(r'handbooks', HandbooksViewSet)
 urlpatterns = [
     path('', Index.as_view()),
     path('base', BaseMachine.as_view()),
+    path('machines', MachineDataView.as_view()),
+    path('service', ServiceDataView.as_view()),
+    path('reclamations', ReclamationDataView.as_view()),
     path('api', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
-    path('token/', obtain_auth_token)
+    path('token', obtain_auth_token)
 ]

@@ -1,11 +1,13 @@
 .main {
     margin: 0;
-    padding: 0;
+    padding-top: 5%;
     color: #163E6C;
+    min-height: 70%;
 }
 
 .title {
     margin-left: 5%;
+    margin-top: 0;
 }
 
 .form {
@@ -36,17 +38,27 @@
     line-height: 30px;
     border-style: none;
     border: 1px solid #163E6C;
-    border-radius: 5px;
     background: #163E6C;
-    color: white; 
+    color :#EBE6D6; 
     cursor: pointer;
 }
 
 .form-submit:active {
-    border-style: none;
+    border: 1px solid white;
 }
 
 .title-result {
     margin-left: 5%;
     margin-top: 5%;
+}
+
+.marg {
+    margin: 0;
+}
+
+.link-to {
+    text-decoration: none;
+    color: #163E6C;
+    font-size: 18px;
+    margin-left: 5%;
 }

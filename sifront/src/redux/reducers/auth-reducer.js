@@ -1,11 +1,11 @@
-const initialState = false;
+const initialState = {isAuth: false, user: {name: 'empty', group: 'empty'}};
 
 export default function authReducer ( state = initialState, action ) {
     switch (action.type){
         case 'LOGGED':
-            return true;        
+            return {user: action.payload, isAuth: true};        
         case 'LOGOUT':
-            return false;
+            return {isAuth: false, user: {name: 'empty', group: 'empty'}};
         default:
             return state
     }

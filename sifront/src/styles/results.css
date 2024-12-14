@@ -1,5 +1,5 @@
 .table-results {
-    margin: 2% 5% 0 5%;    
+    margin: 2% 2% 2% 2%;    
 }
 
 .table-results, th, td {
@@ -8,6 +8,10 @@
     text-align: center;
 }
 
+th, td {
+    font-size: 0.833vw;
+}
+
 .table-results th, td {
-    padding: 5px 10px;
+    padding: 5px 5px;
 }
