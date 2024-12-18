@@ -5,11 +5,18 @@ import '../styles/main.css'
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios'
 import MachineBlank from '../components/machine-blank';
+import TechService from '../components/techserv';
+import Reclamations from '../components/reclamations';
+import { Link } from 'react-router-dom';
 
 
 export default function Machine () {
-    const { num } = useParams();
+    const { id } = useParams();
     const [ data, setData ] = useState({}) 
+    const [ check, setCheck ] = useState({
+        btn2: true,
+        btn3: false
+    })
     const navigate = useNavigate();
     const tableHead = [
         'Вид ТО', 'Дата проведения ТО', 'Наработка, м/ч',
@@ -18,12 +25,12 @@ export default function Machine () {
 
 
     useEffect(() => {
-        getData(num)
+        getData(id)
     }, [])
 
     function getData(query) {
         const token = window.localStorage.getItem('token');
-        axios.get(`http://localhost:8000/machines?serial_number=${query}`,
+        axios.get(`http://localhost:8000/machines/${query}`,
             {
             headers: {
               Authorization: 'Token ' + token 
@@ -31,7 +38,7 @@ export default function Machine () {
            })
           .then(function (response) {            
             if(response.status==200){
-                setData(response.data[0])                
+                setData(response.data)                
             }
           })
           .catch(function (error) {
@@ -50,18 +57,31 @@ export default function Machine () {
         return `${width}%`
     }
 
+    function tabHandle(e) {
+        const id = e.target.id;
+        const obj = {
+            btn2: id=='btn2',
+            btn3: id=='btn3'
+        }
+        setCheck(obj)       
+    }
+
 
     return (
         <main className='main'>
+            <Link className='link-to' to='/'>На главную</Link>
             {Object.keys(data).length!=0 ? <MachineBlank data={data}/>: <h1 className='title'>Данные не найдены</h1>}
             <div className='search-result'>
-                        <h2 className='title-result'>Информация о проведенных ТО Вашей техники:</h2>
+                        <h2 className='title-result'>Информация о проведенных ТО Вашей техники: </h2>
                         <div className='tab'>
                             <button type='button' className='tablinks' id='main'  onClick={(e) => navigate('/')}>Общая информация</button>
-                            <button type='button' className='tablinks' id='btn2' disabled={true}>ТО</button>
-                            <button type='button' className='tablinks' id='rec'  onClick={(e) => navigate(`/machine/reclame/${num}`)}>Рекламации</button>
-                        </div>                                             
+                            <button type='button' className='tablinks' id='btn2' disabled={check.btn2} onClick={tabHandle}>ТО</button>
+                            <button type='button' className='tablinks' id='btn3'  disabled={check.btn3} onClick={tabHandle}>Рекламации</button>
+                        </div>
+                        {check.btn2 && Object.keys(data).length!=0 && <div className='tab-content'  id="content-2"><TechService num={ data.serial_number }/></div>}
+                        {check.btn3 && <div className='tab-content'  id="content-3"><Reclamations num={ data.serial_number }/></div>}                                             
             </div>
+            
         </main>
     )
 }

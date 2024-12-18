@@ -7,8 +7,9 @@ export default function MachineBlank({ data }) {
     list.shift();
     const dataKeys = Object.keys(data);
     dataKeys.shift();
+    dataKeys.shift();
 
-    function tdFunc(item) {         
+    function tdFunc(item) {       
         if(typeof(item)=='object') return <td>{item.name}</td>
         return <td>{item}</td>
     }
@@ -17,8 +18,9 @@ export default function MachineBlank({ data }) {
         <div className='blank'>
             <h1 className='title'>Машина, Заводской №: {data.serial_number}</h1>
             <table className='table-results res'>
+            <tbody>
                 {list.map((item, ind) => <tr><td>{item}</td>{tdFunc(data[dataKeys[ind]])}<td className='desc'>{data[dataKeys[ind]].description}</td></tr>)}
-           
+            </tbody>
             </table>
         </div>
     )

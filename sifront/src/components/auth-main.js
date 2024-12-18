@@ -3,6 +3,7 @@ import '../styles/main.css'
 import AuthResults from './authresults';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { groupName } from '../consts/consts';
 
 
 export default function AuthMain() {
@@ -10,7 +11,7 @@ export default function AuthMain() {
     
     return (
         <main className='main'>
-            {authData.user != undefined ? <h1 className='title'>{authData.user.group}: {authData.user.name}</h1>: null}
+            {authData.user != undefined ? <h1 className='title'>{groupName[authData.user.group]}: {authData.user.name}</h1>: null}
             <Link className='link-to'>Справочники</Link>
             {authData ? <AuthResults />: null}           
         </main>

@@ -36,11 +36,17 @@ select {
     border: 0.1em solid #163E6C;
     padding: 0 0.2em;
     background: white;
-    color: #163E6C
+    color: #163E6C;
+    margin-top: 5px;
+
 }
 
 .form-block {
     border: 1px solid #163E6C;
+}
+
+.wider {
+    width: 1000px;
 }
 
 .filter-form {
@@ -51,6 +57,10 @@ select {
     justify-content: space-around;
     justify-items: center;
     
+}
+
+.machine {
+    grid-template-columns: repeat(4, auto);
 }
 
 .filter-form label {
@@ -84,6 +94,7 @@ select {
     margin-bottom: 2px;
     font-size: 18px;
     color :#EBE6D6;
+    cursor: pointer;
 }
 
 .buttn {
@@ -95,10 +106,19 @@ select {
     margin-bottom: 10px;
 }
 
-.td-click {
+.tr-click {
     cursor: pointer;
 }
 
-.td-click:hover {
+.tr-click:hover {
     background: #EBE6D6;
+}
+
+.to {
+    margin-left: 20px;
+}
+
+.input-box {
+    display: flex;
+    flex-direction: column;
 }

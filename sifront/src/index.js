@@ -8,6 +8,8 @@ import Root from './routes/root';
 import SMain from './routes/main';
 import Login from './routes/login';
 import Machine from './routes/machine';
+import TService from './routes/tech-service';
+import Reclamation from './routes/reclamation'
 
 // Clear the existing HTML content
 document.body.innerHTML = '<div id="root"></div>';
@@ -26,12 +28,16 @@ const router = createBrowserRouter([
                 element: <Login />
             },
             {
-                path: '/machine/:num',
+                path: '/machine/:id',
                 element: <Machine />
             },
             {
-                path: '/machine/reclame/:num',
-                element: <h1>HI</h1>
+                path: '/ts/:id',
+                element: <TService />
+            },
+            {
+                path: '/reclame/:id',
+                element: <Reclamation />
             }
         ]
     }

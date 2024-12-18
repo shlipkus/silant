@@ -4,9 +4,11 @@ import '../styles/authres.css';
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { machineHead } from '../consts/consts';
+import AddMachine from './add_machine';
 
 export default function Machines() {
     const data = useSelector((state)=> state.maindata);
+    const auth = useSelector((state)=> state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [filters, setFilters] = useState(
@@ -19,21 +21,26 @@ export default function Machines() {
             }
         )
     
-    const [toggle, setToggle] = useState(false);
+    const [toggle, setToggle] = useState(
+            {
+                filter: false,
+                add: false
+            }
+        );
 
     useEffect(()=>{
             getData('')
         }, [])
         
-    function tdFunc(key, item) {            
-            if(typeof(item)=='object') return <td className='td-click' id={key} onClick={handleTd}>{item.name}</td>
-            if(key=='serial_number') return <td className='td-click' id={key} onClick={handleTd}>{item}</td>
-            return <td>{item}</td>
+    function tdFunc(obj, key, item) { 
+            if(key=='id') return null           
+            if(typeof(item)=='object') return <td id={obj.id}>{item.name}</td>
+            return <td id={obj.id}>{item}</td>
         }
     
     
     const tableSort = [
-            'machine__serial_number', 'tech_model__name', 'eng_model__name', 'eng_number', 'trans_model__name', 
+            'serial_number', 'tech_model__name', 'eng_model__name', 'eng_number', 'trans_model__name', 
             'trans_number', 'drv_axle_model__name', 'dev_axle_number', 'str_axle_model__name',
              'str_axle_number', 'sup_contract', 'ship_date', 'consignee', 'sup_address',
              'equipment', 'client__name', 'service_company__name'
@@ -51,6 +58,7 @@ export default function Machines() {
               .then(function (response) {            
                 if(response.status==200){
                     dispatch({type: 'ADDMAINDATA', payload: response.data});
+                    dispatch({type: 'ADDLIST', payload: response.data})
                 }
               })
               .catch(function (error) {
@@ -59,9 +67,7 @@ export default function Machines() {
         }
     
     function handleTd(e){
-        if(e.target.id=='serial_number') {
-            navigate(`/machine/${e.target.innerText}`)
-        }        
+        navigate(`/machine/${e.target.id}`)       
     }
     
     function getWidth(){
@@ -78,6 +84,11 @@ export default function Machines() {
             e.preventDefault()
             getData(`tech_model__name__contains=${filters.tech}&eng_model__name__contains=${filters.eng}&trans_model__name__contains=${filters.trans}&drv_axle_model__name__contains=${filters.drv_axle}&str_axle_model__name__contains=${filters.str_axle}`)
         }
+
+    function catchPost() {
+        getData('');
+    }
+
     return (
         <><div className='filter-panel'>
             <label>Сортировать по: </label>
@@ -85,8 +96,9 @@ export default function Machines() {
                 {machineHead.map((item, index)=> <option value={index}>{item}</option>)}
             </select>
                 <div className='filters'>
-                    <button className='filter-open' onClick={(e) => setToggle(!toggle)}>Фильтры</button>
-                    {toggle && <form className='form-block' onSubmit={handleFilter}>
+                    <button className='filter-open' onClick={(e) => setToggle({filter: !toggle.filter, add: false})}>Фильтры
+                    </button>{['manager'].includes(auth.user.group) && <button className='filter-open to' onClick={(e) => setToggle({filter: false, add: !toggle.add})}>Добавить запись</button>}
+                    {toggle.filter && <form className='form-block' onSubmit={handleFilter}>
                     <span>Полный или частичный ввод</span>
                     <div className='filter-form'>                           
                         <label>Модель техники: <input className='form-field' type='text' id='1' onChange={(e)=> setFilters({...filters, tech: e.target.value})}></input></label>
@@ -97,6 +109,7 @@ export default function Machines() {
                     </div> 
                     <div className='buttn'><input className='form-submit marg' type='submit' value='Применить' /></div>
                     </form>}
+                    {toggle.add && <AddMachine catchPost={catchPost}/>}
                     </div>
                     </div>
         <table className='table-results'>
@@ -107,8 +120,8 @@ export default function Machines() {
             </thead>
             <tbody>
                 { data.map((obj)=>
-                    <tr>
-                    {Object.keys(obj).map((item) => tdFunc(item, obj[item]))}
+                    <tr className='tr-click' onClick={handleTd}>
+                    {Object.keys(obj).map((item) => tdFunc(obj, item, obj[item]))}
                     </tr>)
                 }
             </tbody>

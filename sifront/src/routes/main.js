@@ -5,6 +5,7 @@ import AuthMain from '../components/auth-main';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 
+
 export default function SMain() {
     const dispatch = useDispatch();
     
@@ -22,7 +23,7 @@ export default function SMain() {
                 })
                 .then(function (response) {            
                     if(response.status==200){
-                        dispatch({type: 'LOGGED', payload: response.data});
+                        dispatch({type: 'ADDAUTHDATA', payload: response.data});
                     }
                 })
                 .catch(function (error) {
@@ -33,6 +34,8 @@ export default function SMain() {
 
     const auth = useSelector((state)=> state.auth);
     return (
-        auth.isAuth ? <AuthMain /> : <BaseMain />
+        <>        
+        {auth.isAuth ? <AuthMain /> : <BaseMain />}
+        </>
     )
 }

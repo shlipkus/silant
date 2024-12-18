@@ -12,7 +12,7 @@ GROUP_CHOICE = {
 
 class Handbooks(models.Model):
     book_name = models.CharField(max_length=128)
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, unique=True)
     description = models.TextField()
 
     class Meta:
@@ -24,7 +24,7 @@ class Handbooks(models.Model):
 
 
 class User(AbstractUser):
-    name = models.CharField(max_length=128, blank=False)
+    name = models.CharField(max_length=128, blank=False, unique=True)
     group = models.CharField(max_length=128, choices=GROUP_CHOICE, default='client')
 
     class Meta:
@@ -36,7 +36,7 @@ class User(AbstractUser):
 
 
 class Machine(models.Model):
-    serial_number = models.CharField(max_length=128, verbose_name='Зав. № машины')  #
+    serial_number = models.CharField(max_length=128, verbose_name='Зав. № машины', unique=True)  #
     tech_model = models.ForeignKey(Handbooks, limit_choices_to={'book_name': 'Модель техники'},
                                    on_delete=models.CASCADE, related_name='tech_model',
                                    verbose_name='Модель техники')  #TEMP
@@ -98,11 +98,11 @@ class Reclamation(models.Model):
     failure_point = models.ForeignKey(Handbooks, on_delete=models.CASCADE,
                                       limit_choices_to={'book_name': 'Узел отказа'}, related_name='fail_point',
                                       verbose_name='Узел отказа')  #
-    failure_desc = models.TextField(verbose_name='Описание отказа')  #Описание отказа
+    failure_desc = models.TextField(verbose_name='Описание отказа', blank=True)  #Описание отказа
     recovery_method = models.ForeignKey(Handbooks, on_delete=models.CASCADE,
                                         related_name='rec_method', verbose_name='Способ восстановления',
                                         limit_choices_to={'book_name': 'Восстановление'})  #
-    used_spares = models.TextField(verbose_name='Используемые запчасти')  #
+    used_spares = models.TextField(verbose_name='Используемые запчасти', blank=True)  #
     recovery_date = models.DateField(default=datetime.date.today, verbose_name='Дата восстановления')  #
 
     downtime = models.GeneratedField(

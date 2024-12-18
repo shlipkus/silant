@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import '../styles/authres.css';
-import axios from 'axios'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import AddRec from './add_rec'
 
-export default function Reclamations() {
+export default function Reclamations({ num }) {
     const data = useSelector((state)=> state.maindata);
+    const auth = useSelector((state)=> state.auth);
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [filters, setFilters] = useState(
             {
@@ -14,15 +18,21 @@ export default function Reclamations() {
             }
         )
             
-    const [toggle, setToggle] = useState(false);
+    const [toggle, setToggle] = useState(
+            {
+                filter: false,
+                add: false
+            }
+        );
 
     useEffect(()=>{
-        getData('')
+        num==undefined ? getData(''): getData(`machine__serial_number=${num}`)
     }, [])
         
-    function tdFunc(item) {            
-            if(typeof(item)=='object') return <td>{item.name}</td>
-            return <td>{item}</td>
+    function tdFunc(obj, key) {
+            if(key=='id') return null            
+            if(typeof(obj[key])=='object') return <td id={obj.id}>{obj[key].name}</td>
+            return <td id={obj.id}>{obj[key]}</td>
         }
     
     const tableHead = [
@@ -70,6 +80,16 @@ export default function Reclamations() {
             e.preventDefault()            
             getData(`failure_point__name__contains=${filters.f_point}&recovery_method__name__contains=${filters.r_method}&service_company__name__contains=${filters.sv_company}`)
         }
+
+    function handleTd(e){
+        navigate(`/reclame/${e.target.id}`)       
+    }
+
+    function catchPost() {
+        getData('');
+    }
+
+
     return (
         <><div className='filter-panel'>
             <label>Сортировать по: </label>
@@ -77,8 +97,9 @@ export default function Reclamations() {
                 {tableHead.map((item, index)=> <option value={index}>{item}</option>)}
             </select>
                 <div className='filters'>
-                    <button className='filter-open' onClick={(e) => setToggle(!toggle)}>Фильтры</button>
-                    {toggle && <form className='form-block' onSubmit={handleFilter}>
+                    <button className='filter-open' onClick={(e) => setToggle({filter: !toggle.filter, add: false})}>Фильтры
+                    </button>{['service company', 'manager'].includes(auth.user.group) && <button className='filter-open to' onClick={(e) => setToggle({filter: false, add: !toggle.add})}>Добавить запись</button>}
+                    {toggle.filter && <form className='form-block' onSubmit={handleFilter}>
                     <span>Полный или частичный ввод</span>
                     <div className='filter-form'>                           
                         <label>Узел отказа: <input className='form-field' type='text' id='1' onChange={(e)=> setFilters({...filters, f_point: e.target.value})}></input></label>
@@ -87,6 +108,7 @@ export default function Reclamations() {
                     </div> 
                     <div className='buttn'><input className='form-submit marg' type='submit' value='Применить' /></div>
                     </form>}
+                    {toggle.add && <AddRec catchPost={catchPost}/>}
                     </div>
                     </div>
         <table className='table-results'>
@@ -97,8 +119,8 @@ export default function Reclamations() {
             </thead>
             <tbody>
                 { data.map((obj)=>
-                    <tr>
-                    {Object.keys(obj).map((item) => tdFunc(obj[item]))}
+                    <tr className='tr-click' onClick={handleTd}>
+                    {Object.keys(obj).map((item) => tdFunc(obj, item))}
                     </tr>)
                 }
             </tbody>

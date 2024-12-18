@@ -24,11 +24,20 @@ class HandbooksViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAdminUser]
 
 
-class Index(APIView):
+class HandbooksList(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        content = {'name': request.user.name, 'group': group_name[request.user.group]}
+        data = Handbooks.objects.all()
+        serializer = HandbooksIdAndNameSerializer(data, many=True)
+        data_sc = User.objects.filter(group='service company')
+        sc_serializer = ServiceCompanySerializer(data_sc, many=True)
+        if request.user.group=='manager':
+            data_cl = User.objects.filter(group='client')
+            cl = ClientSerializer(data_cl, many=True).data
+        else:
+            cl = []
+        content = {'name': request.user.name, 'group': request.user.group, 'hb': serializer.data, 'sc': sc_serializer.data, 'cl': cl}
         return Response(content)
 
 
@@ -84,6 +93,43 @@ class MachineDataView(APIView):
             serializer = MachineSerializer(queryset, many=True)
             return Response(serializer.data)
 
+    def post(self, request):
+        serializer = SetMachineSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response('ggg')
+
+class MachineDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request, id):
+        user = request.user
+        group = user.group
+
+        if group == 'client':
+            try:
+                queryset = Machine.objects.get(client=user, id=id)
+            except ObjectDoesNotExist:
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            serializer = MachineSerializer(queryset)
+            return Response(serializer.data)
+
+        if group == 'manager':
+            try:
+                queryset = Machine.objects.get(id=id)
+            except ObjectDoesNotExist:
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            serializer = MachineSerializer(queryset)
+            return Response(serializer.data)
+
+        if group == 'service company':
+            try:
+                queryset = Machine.objects.get(service_company=user, id=id)
+            except ObjectDoesNotExist:
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            serializer = MachineSerializer(queryset)
+            return Response(serializer.data)
+
+
 
 class ServiceDataView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -122,6 +168,43 @@ class ServiceDataView(APIView):
             serializer = TechServiceSerializer(queryset, many=True)
             return Response(serializer.data)
 
+    def post(self, request):
+        serializer = SetTechServiceSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response('ggg')
+
+
+class ServiceDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, id):
+        user = request.user
+        group = user.group
+
+        if group == 'client':
+            try:
+                queryset = TechService.objects.get(machine__client=user, id=id)
+            except ObjectDoesNotExist:
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            serializer = TechServiceSerializer(queryset)
+            return Response(serializer.data)
+
+        if group == 'manager':
+            try:
+                queryset = TechService.objects.get(id=id)
+            except ObjectDoesNotExist:
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            serializer = TechServiceSerializer(queryset)
+            return Response(serializer.data)
+
+        if group == 'service company':
+            try:
+                queryset = TechService.objects.get(machine__service_company=user, id=id)
+            except ObjectDoesNotExist:
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            serializer = TechServiceSerializer(queryset)
+            return Response(serializer.data)
 
 class ReclamationDataView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -158,4 +241,42 @@ class ReclamationDataView(APIView):
             except ObjectDoesNotExist:
                 return Response(status=status.HTTP_204_NO_CONTENT)
             serializer = ReclamationSerializer(queryset, many=True)
+            return Response(serializer.data)
+
+    def post(self, request):
+        serializer = SetReclamationSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response('ggg')
+
+
+class ReclamationDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, id):
+        user = request.user
+        group = user.group
+
+        if group == 'client':
+            try:
+                queryset = Reclamation.objects.get(machine__client=user, id=id)
+            except ObjectDoesNotExist:
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            serializer = ReclamationSerializer(queryset)
+            return Response(serializer.data)
+
+        if group == 'manager':
+            try:
+                queryset = Reclamation.objects.get(id=id)
+            except ObjectDoesNotExist:
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            serializer = ReclamationSerializer(queryset)
+            return Response(serializer.data)
+
+        if group == 'service company':
+            try:
+                queryset = Reclamation.objects.get(machine__service_company=user, id=id)
+            except ObjectDoesNotExist:
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            serializer = ReclamationSerializer(queryset)
             return Response(serializer.data)
