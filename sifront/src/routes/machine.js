@@ -8,6 +8,7 @@ import MachineBlank from '../components/machine-blank';
 import TechService from '../components/techserv';
 import Reclamations from '../components/reclamations';
 import { Link } from 'react-router-dom';
+import { ip } from '../consts/consts';
 
 
 export default function Machine () {
@@ -30,7 +31,7 @@ export default function Machine () {
 
     function getData(query) {
         const token = window.localStorage.getItem('token');
-        axios.get(`http://localhost:8000/machines/${query}`,
+        axios.get(`${ip}/machines/${query}`,
             {
             headers: {
               Authorization: 'Token ' + token 
@@ -69,7 +70,7 @@ export default function Machine () {
 
     return (
         <main className='main'>
-            <Link className='link-to' to='/'>На главную</Link>
+            <Link className='link-to' to={-1}>Назад</Link>
             {Object.keys(data).length!=0 ? <MachineBlank data={data}/>: <h1 className='title'>Данные не найдены</h1>}
             <div className='search-result'>
                         <h2 className='title-result'>Информация о проведенных ТО Вашей техники: </h2>

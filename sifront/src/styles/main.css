@@ -1,79 +1,167 @@
-.main {
-    margin: 0;
-    padding-top: 5%;
-    color: #163E6C;
-    min-height: 70%;
+@media(min-width: 900px){
+    .main {
+        margin: 0;
+        padding-top: 5%;
+        color: #163E6C;
+        min-height: 70%;
+    }
+
+    .title {
+        margin-left: 5%;
+        margin-top: 0;
+    }
+
+    .form {
+        margin-left: 5%;
+        margin-top: 3%;
+    }
+
+    .label {
+        font-size: 22px;
+    }
+
+    .form-input {
+        margin-left: 2%;
+        font-family: 'PTAstraSans';
+        font-size: 22px;
+        border-style: none;
+        border: 1px solid #163E6C;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .form-submit {
+        margin-left: 2%;
+        padding: 0;
+        width: 200px;
+        font-family: 'PTAstraSans';
+        font-size: 20px;
+        line-height: 30px;
+        border-style: none;
+        border: 1px solid #163E6C;
+        background: #163E6C;
+        color :#EBE6D6; 
+        cursor: pointer;
+    }
+
+    .form-submit:active {
+        border: 1px solid white;
+    }
+
+    .title-result {
+        margin-left: 5%;
+        margin-top: 5%;
+    }
+
+    .marg {
+        margin: 0;
+    }
+
+    .link-to {
+        text-decoration: none;
+        color: #163E6C;
+        font-size: 18px;
+        margin-left: 5%;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button, 
+    input[type="number"]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .error-span {
+        color: red;
+        margin-left: 20px;
+    }
 }
 
-.title {
-    margin-left: 5%;
-    margin-top: 0;
-}
 
-.form {
-    margin-left: 5%;
-    margin-top: 3%;
-}
+@media(max-width: 460px){
+    .main {
+        margin: 0;
+        padding-top: 5%;
+        color: #163E6C;
+        min-height: 74%;
+    }
 
-.label {
-    font-size: 22px;
-}
+    .title {
+        margin-left: 2%;
+        margin-top: 0;
+    }
 
-.form-input {
-    margin-left: 2%;
-    font-family: 'PTAstraSans';
-    font-size: 22px;
-    border-style: none;
-    border: 1px solid #163E6C;
-    border-radius: 5px;
-    text-align: center;
-}
+    .form {
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-.form-submit {
-    margin-left: 2%;
-    padding: 0;
-    width: 200px;
-    font-family: 'PTAstraSans';
-    font-size: 20px;
-    line-height: 30px;
-    border-style: none;
-    border: 1px solid #163E6C;
-    background: #163E6C;
-    color :#EBE6D6; 
-    cursor: pointer;
-}
+    .label {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
 
-.form-submit:active {
-    border: 1px solid white;
-}
+    .form-input {
+        width: 94%;
+        margin-bottom: 10px;
+        font-family: 'PTAstraSans';
+        font-size: 22px;
+        border-style: none;
+        border: 1px solid #163E6C;
+        text-align: center;
+    }
 
-.title-result {
-    margin-left: 5%;
-    margin-top: 5%;
-}
+    .form-submit {
+        width: 96%;
+        height: 50px;
+        padding: 0;
+        font-family: 'PTAstraSans';
+        font-size: 20px;
+        line-height: 30px;
+        border-style: none;
+        border: 1px solid #163E6C;
+        background: #163E6C;
+        color :#EBE6D6; 
+        cursor: pointer;
+    }
 
-.marg {
-    margin: 0;
-}
+    .form-submit:active {
+        border: 1px solid white;
+    }
 
-.link-to {
-    text-decoration: none;
-    color: #163E6C;
-    font-size: 18px;
-    margin-left: 5%;
-}
+    .title-result {
+        margin-left: 2%;
+        margin-top: 5%;
+    }
 
-input[type="number"]::-webkit-inner-spin-button, 
-input[type="number"]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
-}
+    .marg {
+        margin: 0;
+    }
 
-input[type="number"] {
-  -moz-appearance: textfield;
-}
+    .link-to {
+        text-decoration: none;
+        color: #163E6C;
+        font-size: 18px;
+        margin-left: 5%;
+    }
 
-.error-span {
-    color: red;
-    margin-left: 20px;
+    input[type="number"]::-webkit-inner-spin-button, 
+    input[type="number"]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .error-span {
+        color: red;
+        margin-left: 20px;
+    }
 }

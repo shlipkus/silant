@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from django.shortcuts import render
+from drf_spectacular.utils import extend_schema
 from rest_framework import permissions, viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -17,16 +18,12 @@ group_name = {
 
 
 # Create your views here.
-class HandbooksViewSet(viewsets.ModelViewSet):
-    queryset = Handbooks.objects.all()
-    serializer_class = HandbooksSerializer
-    authentication_classes = [SessionAuthentication]
-    permission_classes = [permissions.IsAdminUser]
-
-
-class HandbooksList(APIView):
+class AuthList(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses={200: AuthListSerializer},
+    )
     def get(self, request):
         data = Handbooks.objects.all()
         serializer = HandbooksIdAndNameSerializer(data, many=True)
@@ -40,10 +37,60 @@ class HandbooksList(APIView):
         content = {'name': request.user.name, 'group': request.user.group, 'hb': serializer.data, 'sc': sc_serializer.data, 'cl': cl}
         return Response(content)
 
+class HandbooksView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        request=HandbooksSerializer,
+        responses={200: HandbooksSerializer},
+    )
+    def post(self, request):
+        group = request.user.group
+        if group!='manager':
+            return Response('access denied')
+        serializer = HandbooksSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
+class HandbookDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        responses={200: HandbooksSerializer},
+    )
+    def get(self, request, id):
+        group = request.user.group
+        if group!='manager':
+            return Response('access denied')
+        data = Handbooks.objects.get(id=id)
+        serializer = HandbooksSerializer(data)
+        return Response(serializer.data)
+
+    @extend_schema(
+        request=HandbooksSerializer,
+        responses={200: HandbooksSerializer},
+    )
+    def patch(self, request, id):
+        group = request.user.group
+        if group != 'manager':
+            return Response('access denied')
+        book = Handbooks.objects.get(id=id)
+        serializer = HandbooksSerializer(book, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
 
 class BaseMachine(APIView):
     permission_classes = [permissions.AllowAny]
 
+    @extend_schema(
+        request=NumSerializer,
+        responses={200: BaseMachineSerializer},
+    )
     def post(self, request):
         num = request.data.get('num', None)
         if num is None:
@@ -59,6 +106,9 @@ class BaseMachine(APIView):
 class MachineDataView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses={200: MachineSerializer(many=True)},
+    )
     def get(self, request):
         user = request.user
         group = user.group
@@ -93,14 +143,22 @@ class MachineDataView(APIView):
             serializer = MachineSerializer(queryset, many=True)
             return Response(serializer.data)
 
+    @extend_schema(
+        request=SetMachineSerializer,
+        responses={200: SetMachineSerializer},
+    )
     def post(self, request):
         serializer = SetMachineSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response('ggg')
+        return Response(serializer.data)
 
 class MachineDetailView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        responses={200: MachineSerializer},
+    )
     def get(self, request, id):
         user = request.user
         group = user.group
@@ -134,6 +192,9 @@ class MachineDetailView(APIView):
 class ServiceDataView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses={200: TechServiceSerializer(many=True)},
+    )
     def get(self, request):
         user = request.user
         group = user.group
@@ -168,6 +229,10 @@ class ServiceDataView(APIView):
             serializer = TechServiceSerializer(queryset, many=True)
             return Response(serializer.data)
 
+    @extend_schema(
+        request=SetTechServiceSerializer,
+        responses={200: SetTechServiceSerializer},
+    )
     def post(self, request):
         serializer = SetTechServiceSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -178,6 +243,9 @@ class ServiceDataView(APIView):
 class ServiceDetailView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses={200: TechServiceSerializer},
+    )
     def get(self, request, id):
         user = request.user
         group = user.group
@@ -209,6 +277,9 @@ class ServiceDetailView(APIView):
 class ReclamationDataView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses={200: ReclamationSerializer(many=True)},
+    )
     def get(self, request):
         user = request.user
         group = user.group
@@ -243,6 +314,10 @@ class ReclamationDataView(APIView):
             serializer = ReclamationSerializer(queryset, many=True)
             return Response(serializer.data)
 
+    @extend_schema(
+        request=SetReclamationSerializer,
+        responses={200: SetReclamationSerializer},
+    )
     def post(self, request):
         serializer = SetReclamationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -253,6 +328,9 @@ class ReclamationDataView(APIView):
 class ReclamationDetailView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses={200: ReclamationSerializer},
+    )
     def get(self, request, id):
         user = request.user
         group = user.group

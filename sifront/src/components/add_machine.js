@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { ip } from '../consts/consts';
 
 export default function AddMachine(props) {
 	const [ data, setData ] = useState({
@@ -35,7 +36,7 @@ export default function AddMachine(props) {
             return
         }
 		const token = window.localStorage.getItem('token');
-        axios.post('http://localhost:8000/machines', 
+        axios.post(ip + '/machines', 
         	{
         	        "serial_number": data.serialNumber,
         	        "tech_model": data.techModel,

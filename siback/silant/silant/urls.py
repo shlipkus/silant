@@ -16,16 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 from app.views import *
 
-router = routers.DefaultRouter()
-router.register(r'handbooks', HandbooksViewSet)
-
 
 urlpatterns = [
-    path('', HandbooksList.as_view()),
+    path('', AuthList.as_view()),
     path('base', BaseMachine.as_view()),
     path('machines', MachineDataView.as_view()),
     path('machines/<int:id>', MachineDetailView.as_view()),
@@ -33,8 +31,11 @@ urlpatterns = [
     path('service/<int:id>', ServiceDetailView.as_view()),
     path('reclamations', ReclamationDataView.as_view()),
     path('reclamations/<int:id>', ReclamationDetailView.as_view()),
-    path('api', include(router.urls)),
+    path('handbooks', HandbooksView.as_view()),
+    path('handbooks/<int:id>', HandbookDetailView.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
-    path('token', obtain_auth_token)
+    path('token', obtain_auth_token),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
 ]

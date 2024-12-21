@@ -3,6 +3,7 @@ import '../styles/login.css';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { ip } from '../consts/consts';
 
 export default function Login() {
     const auth = useSelector((state)=> state.auth.isAuth);
@@ -26,7 +27,7 @@ export default function Login() {
 
     function handleSubmit(e){
         e.preventDefault();
-        axios.post('http://localhost:8000/token',
+        axios.post(ip + '/token',
             {
                 username: loginData.username,
                 password: loginData.password

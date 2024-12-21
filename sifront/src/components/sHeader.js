@@ -25,7 +25,7 @@ export default function SHeader() {
             <img src={logo} />
             <h3 className='contacts'>+7-8352-20-12-09, @telegram</h3>
             <div className='auth'>
-                {!auth.isAuth ? <h3 className='link' onClick={handleAuth}>Авторизация</h3>:
+                {!auth.isAuth ? <h3 className='link' onClick={handleAuth}>Вход</h3>:
                 <h3 className='link' onClick={handleOut}>Выход</h3>}
             </div>
         </div>

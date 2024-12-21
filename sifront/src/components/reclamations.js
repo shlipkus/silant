@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import '../styles/authres.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import AddRec from './add_rec'
+import AddRec from './add_rec';
+import { ip } from '../consts/consts';
 
 export default function Reclamations({ num }) {
     const data = useSelector((state)=> state.maindata);
@@ -49,7 +50,7 @@ export default function Reclamations({ num }) {
     
     function getData(query) {
             const token = window.localStorage.getItem('token');
-            axios.get(`http://localhost:8000/reclamations?${query}`,
+            axios.get(`${ip}/reclamations?${query}`,
                 {
                 headers: {
                   Authorization: 'Token ' + token 
@@ -82,7 +83,7 @@ export default function Reclamations({ num }) {
         }
 
     function handleTd(e){
-        navigate(`/reclame/${e.target.id}`)       
+        navigate(`/reclame/${e.target.id!="" ? e.target.id: e.target.firstChild.id}`)       
     }
 
     function catchPost() {
@@ -97,8 +98,8 @@ export default function Reclamations({ num }) {
                 {tableHead.map((item, index)=> <option value={index}>{item}</option>)}
             </select>
                 <div className='filters'>
-                    <button className='filter-open' onClick={(e) => setToggle({filter: !toggle.filter, add: false})}>Фильтры
-                    </button>{['service company', 'manager'].includes(auth.user.group) && <button className='filter-open to' onClick={(e) => setToggle({filter: false, add: !toggle.add})}>Добавить запись</button>}
+                    <div className='buttons'><button className='filter-open' onClick={(e) => setToggle({filter: !toggle.filter, add: false})}>Фильтры
+                    </button>{['service company', 'manager'].includes(auth.user.group) && <button className='filter-open to' onClick={(e) => setToggle({filter: false, add: !toggle.add})}>Добавить запись</button>}</div>
                     {toggle.filter && <form className='form-block' onSubmit={handleFilter}>
                     <span>Полный или частичный ввод</span>
                     <div className='filter-form'>                           
@@ -111,10 +112,10 @@ export default function Reclamations({ num }) {
                     {toggle.add && <AddRec catchPost={catchPost}/>}
                     </div>
                     </div>
-        <table className='table-results'>
+        <div className='scrollable'><table className='table-results'>
             <thead>
                 <tr>
-                    {tableHead.map((item)=> <th style={{width: getWidth()}}>{item}</th>)}
+                    {tableHead.map((item)=> <th style={{width: getWidth()}}><span className='t-span'>{item}</span></th>)}
                 </tr>
             </thead>
             <tbody>
@@ -124,6 +125,6 @@ export default function Reclamations({ num }) {
                     </tr>)
                 }
             </tbody>
-        </table></>
+        </table></div></>
     )
 }

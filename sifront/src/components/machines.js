@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import '../styles/authres.css';
-import axios from 'axios'
+import axios from 'axios';
+import { ip } from '../consts/consts';
 import { useNavigate } from 'react-router-dom';
 import { machineHead } from '../consts/consts';
 import AddMachine from './add_machine';
@@ -34,8 +35,8 @@ export default function Machines() {
         
     function tdFunc(obj, key, item) { 
             if(key=='id') return null           
-            if(typeof(item)=='object') return <td id={obj.id}>{item.name}</td>
-            return <td id={obj.id}>{item}</td>
+            if(typeof(item)=='object') return <td key={key} id={obj.id}>{item.name}</td>
+            return <td key={key} id={obj.id}>{item}</td>
         }
     
     
@@ -49,7 +50,7 @@ export default function Machines() {
     
     function getData(query) {
             const token = window.localStorage.getItem('token');
-            axios.get(`http://localhost:8000/machines?${query}`,
+            axios.get(`${ip}/machines?${query}`,
                 {
                 headers: {
                   Authorization: 'Token ' + token 
@@ -67,7 +68,7 @@ export default function Machines() {
         }
     
     function handleTd(e){
-        navigate(`/machine/${e.target.id}`)       
+        navigate(`/machine/${e.target.id!="" ? e.target.id: e.target.firstChild.id}`)      
     }
     
     function getWidth(){
@@ -87,20 +88,22 @@ export default function Machines() {
 
     function catchPost() {
         getData('');
+        setToggle({filter: false, add: false})
     }
 
     return (
         <><div className='filter-panel'>
             <label>Сортировать по: </label>
             <select className='select' onChange={sortHandle} defaultValue={11}>
-                {machineHead.map((item, index)=> <option value={index}>{item}</option>)}
+                {machineHead.map((item, index)=> <option key={index} value={index}>{item}</option>)}
             </select>
                 <div className='filters'>
-                    <button className='filter-open' onClick={(e) => setToggle({filter: !toggle.filter, add: false})}>Фильтры
-                    </button>{['manager'].includes(auth.user.group) && <button className='filter-open to' onClick={(e) => setToggle({filter: false, add: !toggle.add})}>Добавить запись</button>}
+                    <div className='buttons'><button className='filter-open' onClick={(e) => setToggle({filter: !toggle.filter, add: false})}>Фильтры</button>
+                    {['manager'].includes(auth.user.group) && <button className='filter-open to' onClick={(e) => setToggle({filter: false, add: !toggle.add})}>Добавить запись</button>}</div>
+                            
                     {toggle.filter && <form className='form-block' onSubmit={handleFilter}>
                     <span>Полный или частичный ввод</span>
-                    <div className='filter-form'>                           
+                    <div className='filter-form'>                    
                         <label>Модель техники: <input className='form-field' type='text' id='1' onChange={(e)=> setFilters({...filters, tech: e.target.value})}></input></label>
                         <label>Модель двигателя: <input className='form-field' type='text' id='1' onChange={(e)=> setFilters({...filters, eng: e.target.value})}></input></label>
                         <label>Модель трансмиссии: <input className='form-field' type='text' id='1' onChange={(e)=> setFilters({...filters, trans: e.target.value})}></input></label>
@@ -109,22 +112,24 @@ export default function Machines() {
                     </div> 
                     <div className='buttn'><input className='form-submit marg' type='submit' value='Применить' /></div>
                     </form>}
-                    {toggle.add && <AddMachine catchPost={catchPost}/>}
+                    {toggle.add && <AddMachine catchPost={catchPost}/>}                    
                     </div>
                     </div>
-        <table className='table-results'>
+            <div className='scrollable'><table className='table-results'>
             <thead>
                 <tr>
-                    {machineHead.map((item)=> <th style={{width: getWidth()}}>{item}</th>)}
+                    {machineHead.map((item, index)=> <th key={index} style={{width: getWidth()}}><span className='t-span'>{item}</span></th>)}
                 </tr>
             </thead>
             <tbody>
-                { data.map((obj)=>
-                    <tr className='tr-click' onClick={handleTd}>
+                { data.map((obj, index)=>
+                    <tr key={index} className='tr-click'  onClick={handleTd}>
                     {Object.keys(obj).map((item) => tdFunc(obj, item, obj[item]))}
                     </tr>)
                 }
             </tbody>
-        </table></>
+        </table>        
+        </div>
+        </>
     )
 }

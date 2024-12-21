@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { ip } from '../consts/consts';
 
 export default function AddRec(props) {
 	const [ data, setData ] = useState({
@@ -27,7 +28,7 @@ export default function AddRec(props) {
             return
         }
 		const token = window.localStorage.getItem('token');
-        axios.post('http://localhost:8000/reclamations', 
+        axios.post(ip + '/reclamations', 
         	{
         	        "machine": data.serialNumber,
         	        "failure_date": data.fDate,

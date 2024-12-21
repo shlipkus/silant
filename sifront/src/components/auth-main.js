@@ -12,7 +12,7 @@ export default function AuthMain() {
     return (
         <main className='main'>
             {authData.user != undefined ? <h1 className='title'>{groupName[authData.user.group]}: {authData.user.name}</h1>: null}
-            <Link className='link-to'>Справочники</Link>
+            {['manager'].includes(authData.user.group) && <Link className='link-to' to={'/handbooks'}>Справочники</Link>}
             {authData ? <AuthResults />: null}           
         </main>
     )

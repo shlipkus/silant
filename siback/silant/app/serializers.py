@@ -4,6 +4,8 @@ from .models import *
 from rest_framework import serializers
 
 
+
+
 class HandbooksSerializer(serializers.ModelSerializer):
     class Meta:
         model = Handbooks
@@ -19,11 +21,22 @@ class ServiceCompanySerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'name']
 
-
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'name']
+
+
+class AuthListSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    group = serializers.CharField()
+    hb = HandbooksIdAndNameSerializer(data=Handbooks.objects.all(), many=True)
+    sc = ServiceCompanySerializer(data=User.objects.filter(group='service company'), many=True)
+    cl = ClientSerializer(data=User.objects.filter(group='client'), many=True)
+
+
+class NumSerializer(serializers.Serializer):
+    num = serializers.CharField()
 
 class BaseMachineSerializer(serializers.ModelSerializer):
     class Meta:

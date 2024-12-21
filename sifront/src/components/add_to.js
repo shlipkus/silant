@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { ip } from '../consts/consts';
 
 export default function AddTs(props) {
 	const [ data, setData ] = useState({
@@ -21,7 +22,7 @@ export default function AddTs(props) {
 	function handleSubmit(e) {
 		e.preventDefault();
 		const token = window.localStorage.getItem('token');
-        axios.post('http://localhost:8000/service', 
+        axios.post(ip + '/service', 
         	{
         	        "machine": data.serialNumber,
         	        "ts_type": data.tsType,

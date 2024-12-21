@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../styles/authres.css';
 import axios from 'axios';
+import { ip } from '../consts/consts';
 import AddTs from './add_to'
 
 export default function TechService({ num }) {
@@ -51,7 +52,7 @@ export default function TechService({ num }) {
     
     function getData(query) {
             const token = window.localStorage.getItem('token');
-            axios.get(`http://localhost:8000/service?${query}`,
+            axios.get(`${ip}/service?${query}`,
                 {
                 headers: {
                   Authorization: 'Token ' + token 
@@ -83,7 +84,7 @@ export default function TechService({ num }) {
         }
 
     function handleTd(e){
-        navigate(`/ts/${e.target.id}`)       
+        navigate(`/ts/${e.target.id!="" ? e.target.id: e.target.firstChild.id}`)       
     }
 
     function catchPost() {
@@ -97,8 +98,9 @@ export default function TechService({ num }) {
                 {tableHead.map((item, index)=> <option value={index}>{item}</option>)}
             </select>
                 <div className='filters'>
-                    <button className='filter-open' onClick={(e) => setToggle({filter: !toggle.filter, add: false})}>Фильтры
-                    </button>{['client', 'service company', 'manager'].includes(auth.user.group) && <button className='filter-open to' onClick={(e) => setToggle({filter: false, add: !toggle.add})}>Добавить запись</button>}
+                    <div className='buttons'>
+                    <button className='filter-open' onClick={(e) => setToggle({filter: !toggle.filter, add: false})}>Фильтры</button>{['client', 'service company', 'manager'].includes(auth.user.group) && 
+                    <button className='filter-open to' onClick={(e) => setToggle({filter: false, add: !toggle.add})}>Добавить запись</button>}</div>
                     {toggle.filter && <form className='form-block' onSubmit={handleFilter}>
                     <span>Полный или частичный ввод</span>
                     <div className='filter-form'>                           
@@ -111,10 +113,10 @@ export default function TechService({ num }) {
                     {toggle.add && <AddTs catchPost={catchPost}/>}
                     </div>
                     </div>
-        <table className='table-results'>
+        <div className='scrollable'><table className='table-results'>
             <thead>
                 <tr>
-                    {tableHead.map((item)=> <th style={{width: getWidth()}}>{item}</th>)}
+                    {tableHead.map((item)=> <th style={{width: getWidth()}}><span className='t-span'>{item}</span></th>)}
                 </tr>
             </thead>
             <tbody>
@@ -124,6 +126,6 @@ export default function TechService({ num }) {
                     </tr>)
                 }
             </tbody>
-        </table></>
+        </table></div></>
     )
 }

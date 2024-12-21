@@ -1,0 +1,98 @@
+@media(min-width: 900px){
+	.book-grid {
+		display: grid;
+		grid-template-columns: repeat(4, auto);
+		justify-content: space-around;
+		margin-bottom: 5%;
+
+	}
+
+	.handbook {
+		margin-bottom: 5%;
+	}
+
+	.book {
+		display: block;
+	}
+
+	.data {
+		margin-left: 5%;
+	}
+
+	.descript {
+		margin-left: 5%;
+		margin-bottom: 5%;
+		display: block;
+		width: 80%;
+		font-size: 20px;
+	}
+
+	.putch {
+		margin-left: 5%;
+		width: 520px;
+	}
+
+	.putch-grid {
+		display: flex;
+		flex-direction: column;
+		align-items: start;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
+	.area {
+		width: 400px;
+		height: 150px;
+	}
+}
+
+
+@media(max-width: 460px){
+	.book-grid {
+		display: grid;
+		grid-template-columns: repeat(1, auto);
+		justify-content: space-around;
+		margin-bottom: 5%;
+
+	}
+
+	.handbook {
+		margin-bottom: 5%;
+	}
+
+	.book {
+		display: block;
+	}
+
+	.data {
+		width: 96%;
+		margin-left: 2%;
+	}
+
+	.descript {
+		margin-left: 5%;
+		margin-bottom: 5%;
+		display: block;
+		width: 80%;
+		font-size: 20px;
+	}
+
+	.putch {
+		margin: 0 auto;
+		width: 96%;
+	}
+
+	.putch-grid {
+		width: 96%;
+		display: flex;
+		flex-direction: column;
+		align-items: start;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
+	.area {
+		width: 100%;
+		height: 150px;
+	}
+}

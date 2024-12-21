@@ -3,6 +3,7 @@ import '../styles/main.css';
 import axios from 'axios';
 import Results from './results';
 import { useDispatch, useSelector } from 'react-redux';
+import { ip } from '../consts/consts';
 
 export default function BaseMain() {
     const data = useSelector((state) => state.basedata);
@@ -11,7 +12,7 @@ export default function BaseMain() {
 
     function handleSubmit(e) {
         e.preventDefault();
-        axios.post('http://localhost:8000/base',
+        axios.post(ip + '/base',
             {
                 "num": num
             }).then(function (response){

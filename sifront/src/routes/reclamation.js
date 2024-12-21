@@ -4,6 +4,7 @@ import { reclameHead } from '../consts/consts';
 import { useParams } from "react-router";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { ip } from '../consts/consts';
 
 export default function Reclamation () {
 	const { id } = useParams();
@@ -21,7 +22,7 @@ export default function Reclamation () {
     function getData(query) {
         const token = window.localStorage.getItem('token');
         console.log('get')
-        axios.get(`http://localhost:8000/reclamations/${query}`,
+        axios.get(`${ip}/reclamations/${query}`,
             {
             headers: {
               Authorization: 'Token ' + token 

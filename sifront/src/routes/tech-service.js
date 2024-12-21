@@ -4,6 +4,7 @@ import { serviceHead } from '../consts/consts';
 import { useParams } from "react-router";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { ip } from '../consts/consts';
 
 export default function TService () {
 	const { id } = useParams();
@@ -20,7 +21,7 @@ export default function TService () {
 
     function getData(query) {
         const token = window.localStorage.getItem('token');
-        axios.get(`http://localhost:8000/service/${query}`,
+        axios.get(`${ip}/service/${query}`,
             {
             headers: {
               Authorization: 'Token ' + token 
